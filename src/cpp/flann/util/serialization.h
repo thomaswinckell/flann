@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <stdio.h>
-#include "flann/ext/lz4.h"
-#include "flann/ext/lz4hc.h"
 
 
 namespace flann
@@ -388,14 +386,16 @@ class SaveArchive : public OutputArchive<SaveArchive>
     int first_block_;
     char *buffer_blocks_;
     char *compressed_buffer_;
-    LZ4_streamHC_t lz4Stream_body;
-    LZ4_streamHC_t* lz4Stream;
+    //LZ4_streamHC_t lz4Stream_body;
+    //LZ4_streamHC_t* lz4Stream;
 
     void initBlock()
     {
+        throw FLANNException("Not implemented");
+
         // Alloc the space for both buffer blocks (each compressed block
         // references the previous)
-        buffer_ = buffer_blocks_ = (char *)malloc(BLOCK_BYTES*2);
+        /*buffer_ = buffer_blocks_ = (char *)malloc(BLOCK_BYTES*2);
         compressed_buffer_ = (char *)malloc(LZ4_COMPRESSBOUND(BLOCK_BYTES) + sizeof(size_t));
         if (buffer_ == NULL || compressed_buffer_ == NULL) {
             throw FLANNException("Error allocating compression buffer");
@@ -406,7 +406,7 @@ class SaveArchive : public OutputArchive<SaveArchive>
         LZ4_resetStreamHC(lz4Stream, 9);
         first_block_ = true;
 
-        offset_ = 0;
+        offset_ = 0;*/
     }
 
     void flushBlock()
@@ -561,13 +561,14 @@ class LoadArchive : public InputArchive<LoadArchive>
 
     char *buffer_blocks_;
     char *compressed_buffer_;
-    LZ4_streamDecode_t lz4StreamDecode_body;
-    LZ4_streamDecode_t* lz4StreamDecode;
+    //LZ4_streamDecode_t lz4StreamDecode_body;
+    //LZ4_streamDecode_t* lz4StreamDecode;
     size_t block_sz_;
 
     void decompressAndLoadV10(FILE* stream)
     {
-        buffer_ = NULL;
+        throw FLANNException("Not implemented");
+        /*buffer_ = NULL;
 
         // Find file size
         size_t pos = ftell(stream);
@@ -625,12 +626,13 @@ class LoadArchive : public InputArchive<LoadArchive>
         // Put the file pointer at the end of the data we've read
         if (compressedSz+headSz+pos != fileSize)
             fseek(stream, compressedSz+headSz+pos, SEEK_SET);
-        block_sz_ = uncompressedSz+headSz;
+        block_sz_ = uncompressedSz+headSz;*/
     }
 
     void initBlock(FILE *stream)
     {
-        size_t pos = ftell(stream);
+        throw FLANNException("Not implemented");
+        /*size_t pos = ftell(stream);
         buffer_ = NULL;
         buffer_blocks_ = NULL;
         compressed_buffer_ = NULL;
@@ -671,12 +673,13 @@ class LoadArchive : public InputArchive<LoadArchive>
         loadBlock(buffer_+headSz, head->first_block_size, stream);
         block_sz_ += headSz;
         ptr_ = buffer_;
-        free(head);
+        free(head);*/
     }
 
     void loadBlock(char* buffer_, size_t compSz, FILE* stream)
     {
-        if(compSz >= LZ4_COMPRESSBOUND(BLOCK_BYTES)) {
+        throw FLANNException("Not implemented");
+        /*if(compSz >= LZ4_COMPRESSBOUND(BLOCK_BYTES)) {
             throw FLANNException("Requested block size too large");
         }
 
@@ -691,7 +694,7 @@ class LoadArchive : public InputArchive<LoadArchive>
         if(decBytes <= 0) {
             throw FLANNException("Invalid index file, cannot decompress block");
         }
-        block_sz_ = decBytes;
+        block_sz_ = decBytes;*/
     }
 
     void preparePtr(size_t size)
